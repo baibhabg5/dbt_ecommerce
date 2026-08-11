@@ -65,10 +65,11 @@ dbt_ecommerce
 ├── README.md
 └── .gitignore
 ```
-#Technologies Used
+# Technologies Used
+
 Python,Pandas,SQL,PostgreSQL,dbt Core,Docker,Metabase
 
-#Running the Project
+# Running the Project
 
 Clone the repository:
 ```bash
