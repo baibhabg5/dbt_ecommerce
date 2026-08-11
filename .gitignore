@@ -1,0 +1,37 @@
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+.venv/
+venv/
+env/
+
+# dbt
+target/
+dbt_packages/
+logs/
+*.log
+.partial_parse.msgpack
+dbt_project/.dbt/
+# Generated data
+*.csv
+!dbt_project/dbt_ecommerce/seeds/exchange_rates.csv
+*.parquet
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml

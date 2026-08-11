@@ -1,0 +1,50 @@
+
+services: 
+ postgres: #
+   image: postgres:15 
+   container_name: dbt_postgres 
+   restart: always 
+   environment: 
+     POSTGRES_USER:  ${POSTGRES_USER}
+     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
+     POSTGRES_DB: ${POSTGRES_DB} #while [dbt init u will be asked for schema name]You cannot create a PostgreSQL schema simply by adding: POSTGRES_SCHEMA: analytics here
+   command: ["postgres", "-c", "wal_level=logical"]
+   ports: 
+     - "5432:5432" #port to connect to the warehouse
+   volumes: 
+     - postgres_data:/var/lib/postgresql/data 
+   networks: 
+     - dbt_network 
+ 
+ dbt: 
+   build: . #we built a container not used the image directly [using the Dockerfile]{add --build while running containers}
+   container_name: dbt_core 
+   volumes: 
+     - ./dbt_project:/usr/app 
+     - ./dbt_project/.dbt:/root/.dbt #no need to add profiles.yml as this is the place its searched by defaault
+   depends_on: 
+     - postgres 
+   networks: 
+     - dbt_network 
+ metabase:
+   image: metabase/metabase:latest
+   container_name: metabase
+   ports:
+     - "3000:3000"
+   depends_on:
+     - postgres
+   networks:
+     - dbt_network
+
+ 
+volumes: 
+ postgres_data: 
+ 
+networks: 
+ dbt_network: 
+   driver: bridge
+
+#to run this we need to add --build to    docker compose up -d --build
+#dbt-core-runs when u are using it and then stops not postgres as it is a db always in use
+
+#docker compose run --rm dbt dbt debug to see for errors
